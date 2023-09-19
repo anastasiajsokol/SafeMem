@@ -12,4 +12,4 @@
  *      param: symbol name to fetch the address of
  *      WARNING: may call malloc
 **/
-void* dynamic_fetch_symbol_address(const char*);
+void* dynamic_fetch_symbol_address(const char* symbol);
