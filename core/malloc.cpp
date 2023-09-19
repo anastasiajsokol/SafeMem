@@ -11,21 +11,21 @@ namespace safemem {
     static struct {
         std::uint8_t data[buffer_length];
         bool used = false;
-    } buffer;
+    } staticbuffer;
 };
 
 extern "C" void* aligned_alloc(std::size_t alignment, std::size_t size){
     if(safemem::PlatformDescriptor::load()){
         return safemem::PlatformDescriptor::aligned_alloc(alignment, size);
-    } else if(size <= safemem::buffer_length && safemem::buffer.used == false){
-        return safemem::buffer.data;
+    } else if(size <= safemem::buffer_length && safemem::staticbuffer.used == false){
+        return safemem::staticbuffer.data;
     }
 
     return nullptr;
 }
 
 extern "C" void* realloc(void* memory, std::size_t size){
-    if(memory == safemem::buffer.data){
+    if(memory == safemem::staticbuffer.data){
         return nullptr;
     }
 
@@ -39,9 +39,9 @@ extern "C" void* realloc(void* memory, std::size_t size){
 extern "C" void* calloc(std::size_t number, std::size_t size){
     if(safemem::PlatformDescriptor::load()){
         return safemem::PlatformDescriptor::calloc(number, size);
-    } else if(number * size <= safemem::buffer_length && !safemem::buffer.used){
-        safemem::buffer.used = true;
-        return safemem::buffer.data;
+    } else if(number * size <= safemem::buffer_length && !safemem::staticbuffer.used){
+        safemem::staticbuffer.used = true;
+        return safemem::staticbuffer.data;
     }
 
     return nullptr;
@@ -50,17 +50,17 @@ extern "C" void* calloc(std::size_t number, std::size_t size){
 extern "C" void* malloc(std::size_t size){
     if(safemem::PlatformDescriptor::load()){
         return safemem::PlatformDescriptor::malloc(size);
-    } else if(size <= safemem::buffer_length && !safemem::buffer.used){
-        safemem::buffer.used = true;
-        return safemem::buffer.data;
+    } else if(size <= safemem::buffer_length && !safemem::staticbuffer.used){
+        safemem::staticbuffer.used = true;
+        return safemem::staticbuffer.data;
     }
 
     return nullptr;
 }
 
 extern "C" void free(void* memory){
-    if(memory == safemem::buffer.data){
-        safemem::buffer.used = false;
+    if(memory == safemem::staticbuffer.data){
+        safemem::staticbuffer.used = false;
         return;
     }
 
