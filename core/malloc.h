@@ -25,8 +25,8 @@ namespace safemem {
     };
 };
 
-void* aligned_alloc(std::size_t alignment, std::size_t size);
-void* calloc(std::size_t number, std::size_t size);
-void* realloc(void* memory, std::size_t size);
-void* malloc(std::size_t size);
-void  free(void* memory);
+extern "C" void* aligned_alloc(std::size_t alignment, std::size_t size);
+extern "C" void* calloc(std::size_t number, std::size_t size);
+extern "C" void* realloc(void* memory, std::size_t size);
+extern "C" void* malloc(std::size_t size);
+extern "C" void  free(void* memory);

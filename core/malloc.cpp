@@ -3,7 +3,7 @@
 #include "platformdescriptor.h"
 #include <cstdint>
 
-void* aligned_alloc(std::size_t alignment, std::size_t size){
+extern "C" void* aligned_alloc(std::size_t alignment, std::size_t size){
     if(safemem::PlatformDescriptor::safe()){
         return safemem::PlatformDescriptor().aligned_alloc(alignment, size);
     }
@@ -11,7 +11,7 @@ void* aligned_alloc(std::size_t alignment, std::size_t size){
     return nullptr;
 }
 
-void* realloc(void* memory, std::size_t size){
+extern "C" void* realloc(void* memory, std::size_t size){
     if(safemem::PlatformDescriptor::safe()){
         return safemem::PlatformDescriptor().realloc(memory, size);
     }
@@ -19,7 +19,7 @@ void* realloc(void* memory, std::size_t size){
     return nullptr;
 }
 
-void* calloc(std::size_t number, std::size_t size){
+extern "C" void* calloc(std::size_t number, std::size_t size){
     if(safemem::PlatformDescriptor::safe()){
         return safemem::PlatformDescriptor().calloc(number, size);
     }
@@ -27,7 +27,7 @@ void* calloc(std::size_t number, std::size_t size){
     return nullptr;
 }
 
-void* malloc(std::size_t size){
+extern "C" void* malloc(std::size_t size){
     if(safemem::PlatformDescriptor::safe()){
         return safemem::PlatformDescriptor().malloc(size);
     }
@@ -35,7 +35,7 @@ void* malloc(std::size_t size){
     return nullptr;
 }
 
-void free(void* memory){
+extern "C" void free(void* memory){
     if(safemem::PlatformDescriptor::safe()){
         safemem::PlatformDescriptor().free(memory);
     }
