@@ -26,26 +26,29 @@ struct PlatformDescriptor {
     inline static malloc_t *malloc                  = nullptr;
     inline static free_t *free                      = nullptr;
 
-    PlatformDescriptor(){
+    PlatformDescriptor() = delete;
+
+    /**
+     *  Load dynamic addresses into object
+     *      returns true if PlatformDescriptor references are valid
+     *      returns false every other case
+     *  note that it is safe to call multiple times, subsequent loads will be ignored
+    **/
+    static bool load(){
         if(status == PlatformStatus::unset){
             status          = PlatformStatus::loading;
-            
+
             aligned_alloc   = (aligned_alloc_t*)dynamic_fetch_symbol_address("aligned_alloc");
             realloc         = (realloc_t*)dynamic_fetch_symbol_address("realloc");
             calloc          = (calloc_t*)dynamic_fetch_symbol_address("calloc");
             malloc          = (malloc_t*)dynamic_fetch_symbol_address("malloc");
             free            = (free_t*)dynamic_fetch_symbol_address("free");
-            
-            status          = PlatformStatus::set;
-        }
-    }
 
-    /**
-     *  Check if it is safe to construct a platform descriptor
-     *       Unsafe if currently loading or a panic occured
-    **/
-    static bool safe(){
-        return status == PlatformStatus::unset || status == PlatformStatus::set;
+            const bool ok   = aligned_alloc && realloc && calloc && malloc && free;
+            status          = ok ? PlatformStatus::set : PlatformStatus::panic;
+        }
+
+        return status == PlatformStatus::set;
     }
 
     private:

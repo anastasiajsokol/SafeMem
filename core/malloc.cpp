@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 namespace safemem {
-    constexpr std::size_t buffer_length = 64;
+    constexpr std::size_t buffer_length = 1024;
 
     static struct {
         std::uint8_t data[buffer_length];
@@ -15,8 +15,8 @@ namespace safemem {
 };
 
 extern "C" void* aligned_alloc(std::size_t alignment, std::size_t size){
-    if(safemem::PlatformDescriptor::safe()){
-        return safemem::PlatformDescriptor().aligned_alloc(alignment, size);
+    if(safemem::PlatformDescriptor::load()){
+        return safemem::PlatformDescriptor::aligned_alloc(alignment, size);
     } else if(size <= safemem::buffer_length && safemem::buffer.used == false){
         return safemem::buffer.data;
     }
@@ -29,16 +29,16 @@ extern "C" void* realloc(void* memory, std::size_t size){
         return nullptr;
     }
 
-    if(safemem::PlatformDescriptor::safe()){
-        return safemem::PlatformDescriptor().realloc(memory, size);
+    if(safemem::PlatformDescriptor::load()){
+        return safemem::PlatformDescriptor::realloc(memory, size);
     }
 
     return nullptr;
 }
 
 extern "C" void* calloc(std::size_t number, std::size_t size){
-    if(safemem::PlatformDescriptor::safe()){
-        return safemem::PlatformDescriptor().calloc(number, size);
+    if(safemem::PlatformDescriptor::load()){
+        return safemem::PlatformDescriptor::calloc(number, size);
     } else if(number * size <= safemem::buffer_length && !safemem::buffer.used){
         safemem::buffer.used = true;
         return safemem::buffer.data;
@@ -48,8 +48,8 @@ extern "C" void* calloc(std::size_t number, std::size_t size){
 }
 
 extern "C" void* malloc(std::size_t size){
-    if(safemem::PlatformDescriptor::safe()){
-        return safemem::PlatformDescriptor().malloc(size);
+    if(safemem::PlatformDescriptor::load()){
+        return safemem::PlatformDescriptor::malloc(size);
     } else if(size <= safemem::buffer_length && !safemem::buffer.used){
         safemem::buffer.used = true;
         return safemem::buffer.data;
@@ -64,7 +64,7 @@ extern "C" void free(void* memory){
         return;
     }
 
-    if(safemem::PlatformDescriptor::safe()){
-        safemem::PlatformDescriptor().free(memory);
+    if(safemem::PlatformDescriptor::load()){
+        safemem::PlatformDescriptor::free(memory);
     }
 }
