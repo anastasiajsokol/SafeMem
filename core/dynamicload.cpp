@@ -19,7 +19,7 @@ void* dynamic_fetch_symbol_address(const char* symbol){
     // most of the issues are things that do not really matter for debugging
     // (for example, the free symbol this returns may not actually free)
     // and even if we detected this (which we could) there is not much that we could do
-    void* address = dlsym(RTLD_NEXT, symbol);
+    return dlsym(RTLD_NEXT, symbol);
 }
 
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -28,14 +28,14 @@ void* dynamic_fetch_symbol_address(const char* symbol){
 
 void* dynamic_fetch_symbol_address(const char* symbol){
     // attempt to load from c standard library - ucrtbase.dll
-    void* symbol = GetProcAddress(GetModuleHandle(TEXT("ucrtbase.dll")), symbol);
+    void* address = GetProcAddress(GetModuleHandle(TEXT("ucrtbase.dll")), symbol);
 
-    if(symbol == nullptr){
+    if(address == nullptr){
         // if unable to load from ucrtbase.dll, try MSVC implementation up to v6.0 
-        symbol = GetProcAddress(GetModuleHandle(TEXT("msvcrt.dll")), symbol);
+        address = GetProcAddress(GetModuleHandle(TEXT("msvcrt.dll")), symbol);
     }
 
-    return symbol;
+    return address;
 }
 
 #else
