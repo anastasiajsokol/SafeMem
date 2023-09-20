@@ -1,3 +1,7 @@
+/**
+ *  Show the usage of safemem::get_global_new_usage() for detecting memory leaks
+**/
+
 #include <iostream>
 #include <cstdlib>
 
