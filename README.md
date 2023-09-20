@@ -30,7 +30,7 @@ bool ok = !(end - start);
 
 For a full example see tests/get_global_new_usage_test.cpp
 
-Compile using `g++ core/safemem.cpp tests/get_global_new_usage_test.cpp -o global_usage_test`
+Compile using `g++ -std=c++17 core/safemem.cpp tests/get_global_new_usage_test.cpp -o global_usage_test`
 
 ### object initialization and destruction
 
@@ -54,7 +54,7 @@ This will catch most memory errors (especially if new/delete are used) as well a
 
 A full example can be found at tests/observers.cpp
 
-Compile using `g++ tests/observers.cpp -o observers_test`
+Compile using `g++ -std=c++17 tests/observers.cpp -o observers_test`
 
 ### memory allocating using malloc/free
 
