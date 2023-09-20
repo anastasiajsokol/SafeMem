@@ -8,7 +8,7 @@ c++ standalone runtime memory checker
 
 To check for errors relating to the usage of new / delete (and anything that uses them, such as the default std::allocator) you can use the core module.
 
-There are two main components, the header declares a single function
+There are two main components, a .cpp which defines global overwrites for new and delete, and a header which declares a single function
 
     std::size_t safemem::get_global_new_usage();
 
