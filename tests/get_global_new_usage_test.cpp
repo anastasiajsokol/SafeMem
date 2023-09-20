@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstdlib>
 
-#include "core/safemem.h"
+#include "../core/safemem.h"
 
 int main(){
     std::size_t starting_usage = safemem::get_global_new_usage();
