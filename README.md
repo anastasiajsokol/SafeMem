@@ -30,6 +30,8 @@ bool ok = !(end - start);
 
 For a full example see tests/get_global_new_usage_test.cpp
 
+Compile using `g++ core/safemem.cpp tests/get_global_new_usage_test.cpp -o global_usage_test`
+
 ### object initialization and destruction
 
 For errors relating to improper internal managment of objects you can use the object module.
@@ -52,6 +54,8 @@ This will catch most memory errors (especially if new/delete are used) as well a
 
 A full example can be found at tests/observers.cpp
 
+Compile using `g++ tests/observers.cpp -o observers_test`
+
 ### memory allocating using malloc/free
 
 Unfortunately, unlike new / delete overwriting malloc / free is much harder and impossible to do in a standard way.
@@ -65,3 +69,7 @@ On Windows you can install Linux then use LD_PRELOAD
 This library's implementation of memory checked malloc / free is still in progress.
 
 If you know of any solutions for Windows please let me know. (_CrtSetAllocHook looks promising)
+
+### memory allocating using inline assembly and os calls
+
+Use valgrind or a different tool.
