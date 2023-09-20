@@ -1,8 +1,20 @@
+#include <iostream>
 #include <cstdlib>
-#include <cstdio>
+
+#include "core/safemem.h"
 
 int main(){
-    void* mem = malloc(8);
-    std::printf("mem: %p\n", mem);
-    return 0;
+    std::size_t starting_usage = safemem::get_global_new_usage();
+
+    std::uint8_t *memory = new std::uint8_t[64];
+
+    std::size_t mid_usage = safemem::get_global_new_usage();
+
+    delete[] memory;
+
+    std::size_t end_usage = safemem::get_global_new_usage();
+
+    std::cout << "Starting usage: " << starting_usage << "\nMid usage: " << mid_usage << "\nEnd usage: " << end_usage << "\nYou " << (starting_usage != end_usage ? "have a memory leak" : "are all good") << std::endl;
+
+    return EXIT_SUCCESS;
 }
